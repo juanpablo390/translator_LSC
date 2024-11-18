@@ -2,7 +2,7 @@ name: translate_lsc
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -31,10 +31,19 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  url_launcher: ^6.3.1
+  flutter_tts: ^4.2.0
+
+  http: ^1.2.2
+  image_picker: ^1.1.2
+  path: ^1.9.0
+  http_parser: ^4.0.2
+  mime: ^2.0.0
+  video_player: ^2.9.2
+
 
 dev_dependencies:
   flutter_test:
@@ -45,7 +54,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -53,7 +62,55 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-   - assets/
+    - assets/icons/
+    - assets/videos/
+    
+    - assets/signs/adios/
+    - assets/signs/amigo/
+    - assets/signs/ayuda/
+    - assets/signs/bien/
+    - assets/signs/bienvenido/
+    - assets/signs/buenas noches/
+    - assets/signs/buenas tardes/
+    - assets/signs/buenos dias/
+    - assets/signs/casa/
+    - assets/signs/comer/
+    - assets/signs/como estas/
+    - assets/signs/cuidate/
+    - assets/signs/gracias/
+    - assets/signs/hermana/
+    - assets/signs/hermano/
+    - assets/signs/hija/
+    - assets/signs/hijo/
+    - assets/signs/hola/
+    - assets/signs/jugar/
+    - assets/signs/mal/
+    - assets/signs/mama/
+    - assets/signs/mi nombre es/
+    - assets/signs/mucho gusto/
+    - assets/signs/no/
+    - assets/signs/papa/
+    - assets/signs/perdon/
+    - assets/signs/permiso/
+    - assets/signs/por favor/
+    - assets/signs/repetir/
+    - assets/signs/si/
+    - assets/signs/te ayudo/
+    - assets/signs/tu/
+    - assets/signs/yo/
+    - assets/signs/soy/
+    - assets/signs/años/
+    - assets/signs/estudiante/
+    - assets/signs/pamplona/
+    - assets/signs/universidad/
+    - assets/signs/tengo/
+    - assets/signs/tambien/
+    - assets/signs/sharith/
+    - assets/signs/valentina/
+    - assets/signs/22/
+
+    
+
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
