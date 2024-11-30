@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:translate_lsc/sections/information_page.dart';
 import 'package:translate_lsc/sections/register_page.dart';
 
@@ -6,8 +7,7 @@ class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _LoginPageState createState() => _LoginPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -15,8 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   void _login() {
-    if (_userController.text == 'user' &&
-        _passwordController.text == 'password') {
+    if (_userController.text == 'sharith' && _passwordController.text == '123') {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const InformationPage()),
@@ -38,162 +37,146 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  bool _isObscured = true; // Controla si el texto está oculto
+  bool _isObscured = true;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(
-                'assets/icons/fondo.png'), // Cambia esto por la ruta de tu imagen
-            fit: BoxFit.cover, // Ajusta cómo se muestra la imagen
-          ),
-        ),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const SizedBox(height: 70),
-                Image.asset(
-                  'assets/icons/logo.png', // Asegúrate de que la ruta coincida con la del pubspec.yaml
-                  height: 250,
-                ),
-                Text(
-                  'BIENVENIDOS',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: const Color(0xFFF49F38),
-                  ),
-                ),
-                const SizedBox(height: 40),
-                const Align(
-                  alignment:
-                      Alignment.centerLeft, // Alinea el texto a la izquierda
-                  child: Text(
-                    'Usuario',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF062959),
-                    ),
-                  ),
-                ),
-                TextField(
-                  controller: _userController,
-                  cursorColor: Colors.black,
-                  decoration: InputDecoration(
-                    fillColor: Colors.white,
-                    filled: true,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(color: Colors.grey)),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      borderSide: const BorderSide(
-                          color: Colors
-                              .grey), // Color del borde cuando el campo está habilitado
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      borderSide: const BorderSide(
-                          color: Colors
-                              .grey), // Color del borde cuando el campo está enfocado
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const Align(
-                  alignment:
-                      Alignment.centerLeft, // Alinea el texto a la izquierda
-                  child: Text(
-                    'Contraseña',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF062959),
-                    ),
-                  ),
-                ),
-                TextField(
-                  controller: _passwordController,
-                  obscureText: _isObscured,
-                  cursorColor: Colors.black,
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(color: Colors.grey)),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      borderSide: const BorderSide(
-                          color: Colors
-                              .grey), // Color del borde cuando el campo está habilitado
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
-                      borderSide: const BorderSide(
-                          color: Colors
-                              .grey), // Color del borde cuando el campo está enfocado
-                    ),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _isObscured
-                            ? Icons.visibility_off
-                            : Icons.visibility, // Cambia el ícono
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) {
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/icons/fondo.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Center(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Image.asset(
+                        'assets/icons/logo.png',
+                        height: 240.h,
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _isObscured = !_isObscured; // Alterna la visibilidad
-                        });
-                      },
-                    ),
+                      Text(
+                        'BIENVENIDOS',
+                        style: TextStyle(
+                          fontSize: 32.sp,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFFF49F38),
+                        ),
+                      ),
+                      SizedBox(height: 40.h),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Usuario',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF062959),
+                          ),
+                        ),
+                      ),
+                      TextField(
+                        controller: _userController,
+                        cursorColor: Colors.black,
+                        decoration: InputDecoration(
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: const BorderSide(color: Colors.grey),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Contraseña',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF062959),
+                          ),
+                        ),
+                      ),
+                      TextField(
+                        controller: _passwordController,
+                        obscureText: _isObscured,
+                        cursorColor: Colors.black,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: const BorderSide(color: Colors.grey),
+                          ),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isObscured ? Icons.visibility_off : Icons.visibility,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isObscured = !_isObscured;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 40.h),
+                      SizedBox(
+                        width: 280.w,
+                        height: 50.h,
+                        child: ElevatedButton(
+                          onPressed: _login,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF2F509D),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                          ),
+                          child: Text(
+                            'INICIAR SESIÓN',
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 16.h),
+                      TextButton(
+                        onPressed: () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => RegisterPage()),
+                          );
+                        },
+                        child: Text(
+                          '¿No tienes cuenta? Regístrate aquí',
+                          style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 60),
-                ElevatedButton(
-                  onPressed: _login,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF2F509D),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 105, vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(5), // Radio de esquina
-                    ),
-                  ),
-                  child: const Text(
-                    'INICIAR SESIÓN',
-                    style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextButton(
-                  onPressed: () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => RegisterPage()),
-                    );
-                  },
-                  child: const Text(
-                    '¿No tienes cuenta? Regístrate aquí',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

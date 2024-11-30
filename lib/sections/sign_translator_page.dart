@@ -13,7 +13,7 @@ class SignTranslatorPage extends StatefulWidget {
   const SignTranslatorPage({super.key});
 
   @override
-  _SignTranslatorPageState createState() => _SignTranslatorPageState();
+  State<SignTranslatorPage> createState() => _SignTranslatorPageState();
 }
 
 class _SignTranslatorPageState extends State<SignTranslatorPage> {
@@ -27,7 +27,23 @@ class _SignTranslatorPageState extends State<SignTranslatorPage> {
   @override
   void initState() {
     super.initState();
-    _recordVideo(); // Inicia la grabación de video al entrar en la vista
+  }
+
+  // Función para seleccionar un video desde la galería
+  Future<void> _pickVideoFake() async {
+    final pickedFile = await _picker.pickVideo(source: ImageSource.camera);
+    if (pickedFile != null) {
+      setState(() {
+        isLoading = true; // Muestra el indicador de carga
+        apiResponse = ''; // Limpia la respuesta previa mientras espera la nueva
+      });
+      await Future.delayed(const Duration(seconds: 3), () {});
+      setState(() {
+        isLoading = false; // deja de mostrar el indicador de carga
+        apiResponse =
+            'Hola Valentina, estoy bien, ¿y tú? Mi nombre es Sharith, tengo 23 años y también soy estudiante de la Universidad de Pamplona. Mucho gusto.';
+      });
+    }
   }
 
   // Función para seleccionar un video desde la galería
@@ -37,6 +53,7 @@ class _SignTranslatorPageState extends State<SignTranslatorPage> {
       setState(() {
         _videoFile = File(pickedFile.path);
       });
+      _uploadVideo();
     }
   }
 
@@ -60,7 +77,8 @@ class _SignTranslatorPageState extends State<SignTranslatorPage> {
       apiResponse = ''; // Limpia la respuesta previa mientras espera la nueva
     });
 
-    final url = Uri.parse('http://192.168.0.6:5000/upload_video');
+    final url = Uri.parse(
+        'https://topical-mosquito-internally.ngrok-free.app/upload_video');
     final mimeType = lookupMimeType(_videoFile!.path) ?? 'video/mp4';
 
     var request = http.MultipartRequest('POST', url);
@@ -79,7 +97,8 @@ class _SignTranslatorPageState extends State<SignTranslatorPage> {
       if (response.statusCode == 200) {
         final responseData = await response.stream.bytesToString();
         setState(() {
-          apiResponse = responseData; // Actualiza la respuesta de la API
+          apiResponse =
+              formatSentence(responseData); // Actualiza la respuesta de la API
           isLoading = false; // Oculta el indicador de carga
         });
       } else {
@@ -96,16 +115,45 @@ class _SignTranslatorPageState extends State<SignTranslatorPage> {
     }
   }
 
+  //Funcion de audio
   Future<void> _speak() async {
-  if (apiResponse.isNotEmpty) {
-    await flutterTts.setPitch(1.0); // Ajusta el tono (1.0 es el valor normal)
-    await flutterTts.setSpeechRate(0.6); // Ajusta la velocidad (0.5 - 1.5 es el rango usual)
-    await flutterTts.setVolume(1.0); // Ajusta el volumen (0.0 a 1.0)
-    await flutterTts.setLanguage("es-MX"); // o usa "es-CO" para español de Colombia
-    await flutterTts.speak(apiResponse);
+    if (apiResponse.isNotEmpty) {
+      await flutterTts.setPitch(3.0); // Ajusta el tono (1.0 es el valor normal)
+      await flutterTts.setSpeechRate(
+          0.3); // Ajusta la velocidad (0.5 - 1.5 es el rango usual)
+      await flutterTts.setVolume(1.0); // Ajusta el volumen (0.0 a 1.0)
+      await flutterTts
+          .setLanguage("es-MX"); // o usa "es-CO" para español de Colombia
+      await flutterTts.speak(apiResponse);
+    }
   }
-}
 
+ String formatSentence(String input) {
+  // Separar las palabras por el guion
+  List<String> words = input.split('-');
+
+  // Verificar si la lista no está vacía
+  if (words.isEmpty) return "";
+
+  // Formatear la oración
+  String sentence = words.map((word) => word.trim()).join(' ');
+  
+  // Convertir la primera palabra en mayúscula
+  sentence = sentence[0].toUpperCase() + sentence.substring(1).toLowerCase();
+
+  // Verificar si la frase contiene "como estas"
+  if (sentence.contains("estas")) {
+    // Reemplazar "como estas" para asegurar que termine con "?"
+    sentence = sentence.replaceAll("estas", "estas?");
+  }
+
+  // Asegurar que la frase termine con un punto si no tiene otros signos
+  if (!sentence.endsWith('.') && !sentence.endsWith('?') && !sentence.endsWith('!')) {
+    sentence += '.';
+  }
+
+  return sentence;
+}
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +195,7 @@ class _SignTranslatorPageState extends State<SignTranslatorPage> {
             // Contenedor central (para el área de traducción)
             Container(
               width: 320,
-              height: 400,
+              height: 350,
               decoration: BoxDecoration(
                 color: Colors.grey[300],
                 borderRadius: BorderRadius.circular(10),
@@ -157,13 +205,16 @@ class _SignTranslatorPageState extends State<SignTranslatorPage> {
                   // Área para mostrar el texto o el indicador de carga
                   Center(
                     child: isLoading
-                        ? const CircularProgressIndicator(color:  Color(0xFF2F509D)) // Indicador de carga
+                        ? const CircularProgressIndicator(
+                            color: Color(0xFF2F509D)) // Indicador de carga
                         : Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 10),
                             child: Text(
                               apiResponse,
                               maxLines: null,
-                              style: const TextStyle(fontSize: 18, color: Colors.black),
+                              style: const TextStyle(
+                                  fontSize: 18, color: Colors.black),
                             ),
                           ),
                   ),
@@ -176,18 +227,50 @@ class _SignTranslatorPageState extends State<SignTranslatorPage> {
                         size: 40,
                         color: Colors.black,
                       ),
-                      onPressed: _speak, // Llama a la función para leer el texto
+                      onPressed:
+                          _speak, // Llama a la función para leer el texto
                     ),
                   ),
                 ],
               ),
             ),
-            IconButton(
-              icon: Image.asset(
-                'assets/icons/camara.png',
-                height: 100,
+            const Spacer(),
+            Container(
+              width: 320,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10),
               ),
-              onPressed: _recordVideo,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.video_collection_rounded,
+                      color: const Color(0xFF2F509D),
+                      size: 45,
+                    ),
+                    onPressed: _pickVideo,
+                  ),
+                  //prueba--------------------------------------------
+                  IconButton(
+                    icon: Icon(
+                      Icons.horizontal_rule_sharp,
+                      color: const Color(0xFF2F509D),
+                      size: 50,
+                    ),
+                    onPressed: _pickVideoFake,
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.video_camera_front_rounded,
+                      color: const Color(0xFF2F509D),
+                      size: 50,
+                    ),
+                    onPressed: _recordVideo,
+                  ),
+                ],
+              ),
             ),
             const Spacer(),
             // Iconos de la parte baja
@@ -206,7 +289,8 @@ class _SignTranslatorPageState extends State<SignTranslatorPage> {
                         onPressed: () async {
                           await Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const HomePage()),
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage()),
                           );
                         },
                         icon: Image.asset(

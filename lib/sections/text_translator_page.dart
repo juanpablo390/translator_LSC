@@ -6,7 +6,7 @@ class TextTranslatorPage extends StatefulWidget {
   const TextTranslatorPage({super.key});
 
   @override
-  _TextTranslatorPageState createState() => _TextTranslatorPageState();
+  State<TextTranslatorPage> createState() => _TextTranslatorPageState();
 }
 
 class _TextTranslatorPageState extends State<TextTranslatorPage>
@@ -51,7 +51,7 @@ class _TextTranslatorPageState extends State<TextTranslatorPage>
     'jugar': 15,
     'por favor': 18,
     'gracias': 13,
-    'años': 7,
+    'años': 13,
     'estudiante': 5,
     'pamplona': 7,
     'tambien': 6,
@@ -67,14 +67,13 @@ class _TextTranslatorPageState extends State<TextTranslatorPage>
   int _currentWordIndex = 0;
   bool _isAnimating = false;
   bool _animationFinished = false;
-  bool _isFastAnimation =
-      true; // Flag para controlar la velocidad de la animación
   double _animationOpacity = 0.0; // Controla la opacidad de la animación
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(vsync: this);
+    bool hasRepeated = false; // Nueva variable para controlar la repetición
 
     _animationController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -92,15 +91,28 @@ class _TextTranslatorPageState extends State<TextTranslatorPage>
             _isAnimating = false; // Detener la animación
             _animationOpacity = 1.0; // Hacer visible la animación
           });
+          if (!hasRepeated) {
+            hasRepeated = true; // Marcar que ya se ejecutó
+            _startAnimation();
+          }
         }
       }
     });
   }
 
   void _updateWords(String text) {
-    String normalizedText =
-        text.toLowerCase().replaceAll(RegExp(r'[^\w\s]'), '');
+    // Eliminar las tildes sin usar NormalizerForm
+    String normalizedText = text
+        .toLowerCase()
+        .replaceAll(RegExp(r'[áàäâ]'), 'a')
+        .replaceAll(RegExp(r'[éèëê]'), 'e')
+        .replaceAll(RegExp(r'[íìïî]'), 'i')
+        .replaceAll(RegExp(r'[óòöô]'), 'o')
+        .replaceAll(RegExp(r'[úùüû]'), 'u');
 
+    // Eliminar puntuaciones y mantener solo letras y espacios
+    normalizedText = normalizedText.replaceAll(RegExp(r'[^\w\sñÑ]'), '');
+    
     List<String> detectedWords = [];
     List<String> unavailableWords = [];
     int index = 0;
@@ -138,19 +150,21 @@ class _TextTranslatorPageState extends State<TextTranslatorPage>
     if (_currentWordIndex < _words.length) {
       final word = _words[_currentWordIndex];
       final totalFrames = _wordFrames[word]!;
-      final durationPerFrame =
-          _isFastAnimation ? 100 : 100; // Duración rápida o normal
-      _animationController.duration = Duration(
-        milliseconds: totalFrames * durationPerFrame,
-      );
 
-      _frameAnimation =
-          Tween<double>(begin: 1, end: totalFrames.toDouble()).animate(
-        CurvedAnimation(
-          parent: _animationController,
-          curve: Curves.linear,
-        ),
-      );
+      // Precargar todas las imágenes de frames para el word actual
+      for (int i = 1; i <= totalFrames; i++) {
+        precacheImage(AssetImage('assets/signs/$word/frame_$i.jpg'), context);
+      }
+
+      // Ajustar la duración de la animación con base en el número de frames
+      _animationController.duration = Duration(milliseconds: totalFrames * 100);
+
+      // Configurar la animación del frame
+      _frameAnimation = Tween<double>(begin: 1, end: totalFrames.toDouble())
+          .animate(CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.linear,
+      ));
     }
   }
 
@@ -158,33 +172,12 @@ class _TextTranslatorPageState extends State<TextTranslatorPage>
     if (_words.isNotEmpty) {
       setState(() {
         _currentWordIndex = 0;
-        _isFastAnimation = true; // Usar animación rápida al inicio
         _isAnimating = true;
-        _animationFinished = false;
-        _animationOpacity = 0.0; // Comenzar invisible
       });
-      _setAnimationForCurrentWord();
-      _animationController.forward();
-    }
-  }
 
-  void _repeatAnimation() {
-    if (_words.isNotEmpty) {
-      setState(() {
-        _currentWordIndex = 0;
-        _isFastAnimation = false; // Usar animación normal en la repetición
-        _isAnimating = true;
-        _animationFinished = false;
-        _animationOpacity = 0.0; // Comenzar invisible
-      });
+      // Iniciar la animación configurada para la primera palabra
       _setAnimationForCurrentWord();
       _animationController.forward();
-      // Aumentar la opacidad a 1 después de un pequeño retraso
-      Future.delayed(Duration(milliseconds: 100), () {
-        setState(() {
-          _animationOpacity = 1.0; // Hacer visible la animación
-        });
-      });
     }
   }
 
@@ -194,7 +187,6 @@ class _TextTranslatorPageState extends State<TextTranslatorPage>
       _unavailableWords.clear();
       _textController.clear();
       _animationFinished = false;
-      _isFastAnimation = true; // Resetear para animación rápida
       _animationOpacity = 0.0; // Reiniciar opacidad a invisible
     });
   }
@@ -240,15 +232,15 @@ class _TextTranslatorPageState extends State<TextTranslatorPage>
                     opacity: _animationOpacity,
                     duration: const Duration(
                         milliseconds:
-                            300), // Duración de la transición de opacidad
+                            0), // Duración de la transición de opacidad
                     child: AnimatedBuilder(
                       animation: _frameAnimation,
                       builder: (context, child) {
                         return _words.isNotEmpty
                             ? Image.asset(
                                 'assets/signs/${_words[_currentWordIndex]}/frame_${_frameAnimation.value.round()}.jpg',
-                                width: 350,
-                                height: 400,
+                                width: 450,
+                                height: 350,
                               )
                             : Container();
                       },
@@ -260,18 +252,22 @@ class _TextTranslatorPageState extends State<TextTranslatorPage>
                       'Palabras no disponibles: ${_unavailableWords.join(', ')}',
                       style: const TextStyle(color: Colors.red, fontSize: 16),
                     ),
-                  if (_animationFinished)
+                  if (!_isAnimating)
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ElevatedButton(
-                          onPressed: _repeatAnimation,
-                          child: const Text('Ver otra vez'),
+                          onPressed: _startAnimation,
+                          child: const Text('Reproducir',
+                              style: TextStyle(color: Colors.black)),
                         ),
                         const SizedBox(width: 10),
                         ElevatedButton(
                           onPressed: _resetForNewTranslation,
-                          child: const Text('Nueva traducción'),
+                          child: const Text(
+                            'Nueva traducción',
+                            style: TextStyle(color: Colors.black),
+                          ),
                         ),
                       ],
                     ),

@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:translate_lsc/sections/home_page.dart';
 
 class ServicesPage extends StatelessWidget {
@@ -7,112 +7,123 @@ class ServicesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Inicializamos ScreenUtil para que las unidades responsivas funcionen
+    ScreenUtil.init(context);
+
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage(
-                'assets/icons/fondo.png'), // Cambia esto por la ruta de tu imagen
-            fit: BoxFit.cover, // Ajusta cómo se muestra la imagen
+      resizeToAvoidBottomInset: false,
+      body: SingleChildScrollView(
+        child: Container(
+          height: MediaQuery.of(context).size.height, 
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/icons/fondo.png'),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            const SizedBox(height: 50),
-            const Text(
-              "PLANES DE SERVICIO",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.w900,
-                color: Colors.black,
-                fontStyle: FontStyle.italic,
+          padding: EdgeInsets.all(10.0.sp),
+          child: Column(
+            children: [
+              // Título de la sección
+              Text(
+                "PLANES DE SERVICIO",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 30.sp,
+                  fontWeight: FontWeight.w900,
+                  color: Colors.black,
+                  fontStyle: FontStyle.italic,
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                buildPlanCard(
-                  context,
-                  'Gratis',
-                  '0 \$',
-                  '• Acceso al traductor 3 veces al día.\n• Contenido de anuncios publicitarios.',
-                  ' GO NOW ',
-                ),
-                const SizedBox(width: 10),
-                buildPlanCard(
-                  context,
-                  'BÁSICO',
-                  '35.000 \$',
-                  '• Suscripción por 30 dias.\n• Acceso ilimitado al traductor.\n• Sin contenido de anuncios publicitarios.',
-                  'BUY NOW',
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                buildPlanCard(
-                  context,
-                  'ESTANDAR',
-                  '70.000 \$',
-                  '• Suscripción por 6 meses.\n• Acceso ilimitado al traductor.\n• Sin contenido de anuncios publicitarios.',
-                  'BUY NOW',
-                ),
-                buildPlanCard(
+              SizedBox(height: 10.h),
+              
+              // Row de los planes
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buildPlanCard(
+                    context,
+                    'Gratis',
+                    '0 \$',
+                    '• Acceso al traductor 3 veces al día.\n• Contenido de anuncios publicitarios.',
+                    ' GO NOW ',
+                  ),
+                  SizedBox(width: 10.w),
+                  buildPlanCard(
+                    context,
+                    'BÁSICO',
+                    '35.000 \$',
+                    '• Suscripción por 30 días.\n• Acceso ilimitado al traductor.\n• Sin contenido de anuncios publicitarios.',
+                    'BUY NOW',
+                  ),
+                ],
+              ),
+              SizedBox(height: 16.h),
+              
+              // Row con los otros dos planes
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  buildPlanCard(
+                    context,
+                    'ESTANDAR',
+                    '70.000 \$',
+                    '• Suscripción por 6 meses.\n• Acceso ilimitado al traductor.\n• Sin contenido de anuncios publicitarios.',
+                    'BUY NOW',
+                  ),
+                  buildPlanCard(
                     context,
                     'PREMIUM',
                     '600.000 \$',
                     '• Suscripción por 12 meses.\n• Acceso ilimitado al traductor.\n• Sin contenido de anuncios publicitarios.',
-                    'BUY NOW'),
-              ],
-            ),
-          ],
+                    'BUY NOW',
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
+  // Método para construir las tarjetas de los planes
   Widget buildPlanCard(BuildContext contextButton, String title, String price,
       String description, String buttonText) {
     return Column(
       children: [
         Container(
-          width: 120,
-          height: 300,
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          width: 120.w,
+          height: 250.h, 
+          padding: EdgeInsets.symmetric(vertical: 8.sp),
           decoration: BoxDecoration(
             color: Colors.yellow[300],
-            border: Border.all(color: const Color(0xFF032868), width: 5),
+            border: Border.all(color: const Color(0xFF032868), width: 5.sp),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 title,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: 8.h),
               Text(
                 price,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 16,
+                style: TextStyle(
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.red,
                 ),
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 10.h),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                padding: EdgeInsets.symmetric(horizontal: 10.sp),
                 child: Text(
                   description,
                   textAlign: TextAlign.start,
-                  style: const TextStyle(fontSize: 13),
+                  style: TextStyle(fontSize: 13.sp),
                 ),
               ),
             ],
@@ -122,20 +133,19 @@ class ServicesPage extends StatelessWidget {
           onPressed: () async {
             await Navigator.push(
               contextButton,
-              MaterialPageRoute(
-                  builder: (context) => const HomePage()),
+              MaterialPageRoute(builder: (context) => const HomePage()),
             );
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF032868),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 1),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            padding: EdgeInsets.symmetric(horizontal: 16.sp, vertical: 1.sp),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.sp)),
           ),
           child: Text(
             buttonText,
-            style: const TextStyle(
-              fontSize: 16,
+            style: TextStyle(
+              fontSize: 16.sp,
               color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
