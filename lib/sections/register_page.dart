@@ -159,6 +159,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                         child: Text(
                           'Registrar',
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 18.sp, // Usamos 'sp' para texto adaptado
                             fontWeight: FontWeight.bold,
@@ -168,6 +169,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ),
+                  SizedBox(height: 40.h)
                 ],
               ),
             ),

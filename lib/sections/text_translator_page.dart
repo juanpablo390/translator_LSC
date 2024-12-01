@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:translate_lsc/componentes/links_drawer.dart';
 import 'package:translate_lsc/sections/home_page.dart';
 
 class TextTranslatorPage extends StatefulWidget {
-  const TextTranslatorPage({super.key});
+  TextTranslatorPage({super.key});
 
   @override
   State<TextTranslatorPage> createState() => _TextTranslatorPageState();
@@ -112,7 +113,7 @@ class _TextTranslatorPageState extends State<TextTranslatorPage>
 
     // Eliminar puntuaciones y mantener solo letras y espacios
     normalizedText = normalizedText.replaceAll(RegExp(r'[^\w\sñÑ]'), '');
-    
+
     List<String> detectedWords = [];
     List<String> unavailableWords = [];
     int index = 0;
@@ -193,151 +194,162 @@ class _TextTranslatorPageState extends State<TextTranslatorPage>
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context);
+
     return Scaffold(
       key: _scaffoldKey,
       resizeToAvoidBottomInset: false,
       drawer: LinksDrawer(),
       body: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: const BoxDecoration(
+        height: MediaQuery.of(context).size.height,
+        padding: EdgeInsets.all(10.sp),
+        decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/icons/fondo.png'),
             fit: BoxFit.cover,
           ),
         ),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.menu, color: Colors.black, size: 30),
-                  onPressed: () {
-                    _scaffoldKey.currentState?.openDrawer();
-                  },
-                ),
-                Image.asset('assets/icons/logo.png', height: 180),
-              ],
-            ),
-            const SizedBox(height: 50),
-            if (_isAnimating || _animationFinished)
-              Column(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize
+                .min, // Asegura que el Column no ocupe más espacio del necesario
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if (_animationOpacity == 0.0)
-                    CircularProgressIndicator(
-                      color: const Color(0xFF2F509D),
-                    ),
-                  AnimatedOpacity(
-                    opacity: _animationOpacity,
-                    duration: const Duration(
-                        milliseconds:
-                            0), // Duración de la transición de opacidad
-                    child: AnimatedBuilder(
-                      animation: _frameAnimation,
-                      builder: (context, child) {
-                        return _words.isNotEmpty
-                            ? Image.asset(
-                                'assets/signs/${_words[_currentWordIndex]}/frame_${_frameAnimation.value.round()}.jpg',
-                                width: 450,
-                                height: 350,
-                              )
-                            : Container();
-                      },
-                    ),
+                  IconButton(
+                    icon: Icon(Icons.menu, color: Colors.black, size: 30.sp),
+                    onPressed: () {
+                      _scaffoldKey.currentState?.openDrawer();
+                    },
                   ),
-                  const SizedBox(height: 20),
-                  if (_unavailableWords.isNotEmpty)
-                    Text(
-                      'Palabras no disponibles: ${_unavailableWords.join(', ')}',
-                      style: const TextStyle(color: Colors.red, fontSize: 16),
-                    ),
-                  if (!_isAnimating)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ElevatedButton(
-                          onPressed: _startAnimation,
-                          child: const Text('Reproducir',
-                              style: TextStyle(color: Colors.black)),
-                        ),
-                        const SizedBox(width: 10),
-                        ElevatedButton(
-                          onPressed: _resetForNewTranslation,
-                          child: const Text(
-                            'Nueva traducción',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ],
-                    ),
+                  Image.asset('assets/icons/logo.png',
+                      height: 180.h, width: 180.w),
                 ],
-              )
-            else
-              Container(
-                width: 320,
-                height: 400,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 10),
-                      child: TextField(
-                        focusNode: _focusNode,
-                        controller: _textController,
-                        onChanged: _updateWords,
-                        decoration: const InputDecoration(
-                          hintText: "Escribe o habla aquí",
-                          border: InputBorder.none,
-                        ),
-                        maxLines: null,
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.black),
-                      ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: IconButton(
-                        icon: const Icon(Icons.check,
-                            size: 40, color: Colors.black),
-                        onPressed: _startAnimation,
-                      ),
-                    ),
-                  ],
-                ),
               ),
-            const Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Image.asset('assets/icons/audio_texto.png', height: 100),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+              if (_isAnimating || _animationFinished)
+                Column(
                   children: [
-                    IconButton(
-                      onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
-                        );
-                      },
-                      icon: Image.asset(
-                        'assets/icons/home.png',
-                        height: 55,
-                        color: const Color(0xFF2F509D),
+                    if (_animationOpacity == 0.0)
+                      CircularProgressIndicator(
+                        color: Color(0xFF2F509D),
+                      ),
+                    AnimatedOpacity(
+                      opacity: _animationOpacity,
+                      duration: Duration(milliseconds: 0),
+                      child: AnimatedBuilder(
+                        animation: _frameAnimation,
+                        builder: (context, child) {
+                          return _words.isNotEmpty
+                              ? Image.asset(
+                                  'assets/signs/${_words[_currentWordIndex]}/frame_${_frameAnimation.value.round()}.jpg',
+                                  width: 450.w,
+                                  height: 350.h,
+                                )
+                              : Container();
+                        },
                       ),
                     ),
-                    Image.asset('assets/icons/perfil.png', height: 55),
+                    SizedBox(height: 20.h),
+                    if (_unavailableWords.isNotEmpty)
+                      Text(
+                        'Palabras no disponibles: ${_unavailableWords.join(', ')}',
+                        style: TextStyle(color: Colors.red, fontSize: 16.sp),
+                      ),
+                    if (!_isAnimating)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: _startAnimation,
+                            child: Text('Reproducir',
+                                style: TextStyle(color: Colors.black)),
+                          ),
+                          SizedBox(width: 10.w),
+                          ElevatedButton(
+                            onPressed: _resetForNewTranslation,
+                            child: Text('Nueva traducción',
+                                style: TextStyle(color: Colors.black)),
+                          ),
+                        ],
+                      ),
+                  ],
+                )
+              else
+                Column(
+                  children: [
+                    SizedBox(height: 40.h),
+                    Container(
+                      width: 280.w,
+                      height: 250.h,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(10.r),
+                      ),
+                      child: Stack(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 15.w, vertical: 10.h),
+                            child: TextField(
+                              focusNode: _focusNode,
+                              controller: _textController,
+                              onChanged: _updateWords,
+                              decoration: InputDecoration(
+                                hintText: "Escribe o habla aquí",
+                                border: InputBorder.none,
+                              ),
+                              maxLines: null,
+                              style: TextStyle(
+                                  fontSize: 18.sp, color: Colors.black),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: IconButton(
+                              icon: Icon(Icons.check,
+                                  size: 40.sp, color: Colors.black),
+                              onPressed: _startAnimation,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-              ],
-            ),
-          ],
+              SizedBox(height: 103.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Image.asset('assets/icons/audio_texto.png',
+                      height: 100.h, width: 100.w),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                          );
+                        },
+                        icon: Image.asset(
+                          'assets/icons/home.png',
+                          height: 55.h,
+                          width: 55.w,
+                          color: Color(0xFF2F509D),
+                        ),
+                      ),
+                      Image.asset('assets/icons/perfil.png',
+                          height: 55.h, width: 55.w),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

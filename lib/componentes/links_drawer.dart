@@ -5,14 +5,16 @@ class LinksDrawer extends StatelessWidget {
   const LinksDrawer({super.key});
 
   Future<void> _launchURL(String urlString) async {
-    final Uri url = Uri.parse(urlString);
+  final Uri url = Uri.parse(urlString);
 
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-    } else {
-      throw 'Could not launch $urlString';
-    }
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url, mode: LaunchMode.platformDefault);  // Cambié externalApplication a platformDefault
+  } else {
+    throw 'Could not launch $urlString';
   }
+}
+  
+
 
   @override
   Widget build(BuildContext context) {

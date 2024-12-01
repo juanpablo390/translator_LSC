@@ -15,7 +15,7 @@ class _TermsPageState extends State<TermsPage> {
   @override
   Widget build(BuildContext context) {
     // Inicializamos ScreenUtil
-    ScreenUtil.init(context, designSize: Size(375, 812), minTextAdapt: true);
+    ScreenUtil.init(context);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -89,32 +89,34 @@ class _TermsPageState extends State<TermsPage> {
                     ],
                   ),
                   SizedBox(height: 10.h), // Espaciado dinámico
-                  ElevatedButton(
-                    onPressed: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const ServicesPage()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 68, 68, 68),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 105.w, // Usar .w y .h para el padding
-                        vertical: 15.h,
+                  SizedBox(
+                    width: 270.w,
+                    height: 50.h,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ServicesPage()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 68, 68, 68),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)),
                       ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)),
-                    ),
-                    child: Text(
-                      'CONTINUAR',
-                      style: TextStyle(
-                        fontSize: 18.sp, // Usar .sp para el tamaño de fuente
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                      child: Text(
+                        'CONTINUAR',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 18.sp, // Usar .sp para el tamaño de fuente
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
+                  SizedBox(height: 10.h)
                 ],
               ),
             ),

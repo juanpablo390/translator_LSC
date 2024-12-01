@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:translate_lsc/sections/home_page.dart';
 import 'package:translate_lsc/sections/login_page.dart';
 
 void main() {
@@ -13,13 +12,13 @@ class TraductorComSenhasApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(375, 812), // Tamaño base del diseño
+      designSize: const Size(412, 915), // Tamaño base del diseño
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: const HomePage(),
+          home:  LoginPage(),
         );
       },
     );

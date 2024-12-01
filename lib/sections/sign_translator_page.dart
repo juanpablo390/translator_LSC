@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:translate_lsc/componentes/links_drawer.dart';
 import 'package:translate_lsc/sections/home_page.dart';
@@ -10,7 +11,7 @@ import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
 
 class SignTranslatorPage extends StatefulWidget {
-  const SignTranslatorPage({super.key});
+  SignTranslatorPage({super.key});
 
   @override
   State<SignTranslatorPage> createState() => _SignTranslatorPageState();
@@ -19,34 +20,27 @@ class SignTranslatorPage extends StatefulWidget {
 class _SignTranslatorPageState extends State<SignTranslatorPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ImagePicker _picker = ImagePicker();
-  final FlutterTts flutterTts = FlutterTts(); // Instancia de FlutterTts
+  final FlutterTts flutterTts = FlutterTts();
   File? _videoFile;
-  String apiResponse = ''; // Variable para almacenar la respuesta de la API
-  bool isLoading = false; // Estado de carga para mostrar el indicador
+  String apiResponse = '';
+  bool isLoading = false;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  // Función para seleccionar un video desde la galería
   Future<void> _pickVideoFake() async {
     final pickedFile = await _picker.pickVideo(source: ImageSource.camera);
     if (pickedFile != null) {
       setState(() {
-        isLoading = true; // Muestra el indicador de carga
-        apiResponse = ''; // Limpia la respuesta previa mientras espera la nueva
+        isLoading = true;
+        apiResponse = '';
       });
-      await Future.delayed(const Duration(seconds: 3), () {});
+      await Future.delayed(Duration(seconds: 3), () {});
       setState(() {
-        isLoading = false; // deja de mostrar el indicador de carga
+        isLoading = false;
         apiResponse =
             'Hola Valentina, estoy bien, ¿y tú? Mi nombre es Sharith, tengo 23 años y también soy estudiante de la Universidad de Pamplona. Mucho gusto.';
       });
     }
   }
 
-  // Función para seleccionar un video desde la galería
   Future<void> _pickVideo() async {
     final pickedFile = await _picker.pickVideo(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -57,7 +51,6 @@ class _SignTranslatorPageState extends State<SignTranslatorPage> {
     }
   }
 
-  // Función para grabar un video
   Future<void> _recordVideo() async {
     final recordedFile = await _picker.pickVideo(source: ImageSource.camera);
     if (recordedFile != null) {
@@ -68,13 +61,12 @@ class _SignTranslatorPageState extends State<SignTranslatorPage> {
     }
   }
 
-  // Función para subir el video a la API y actualizar la respuesta
   Future<void> _uploadVideo() async {
     if (_videoFile == null) return;
 
     setState(() {
-      isLoading = true; // Muestra el indicador de carga
-      apiResponse = ''; // Limpia la respuesta previa mientras espera la nueva
+      isLoading = true;
+      apiResponse = '';
     });
 
     final url = Uri.parse(
@@ -97,216 +89,195 @@ class _SignTranslatorPageState extends State<SignTranslatorPage> {
       if (response.statusCode == 200) {
         final responseData = await response.stream.bytesToString();
         setState(() {
-          apiResponse =
-              formatSentence(responseData); // Actualiza la respuesta de la API
-          isLoading = false; // Oculta el indicador de carga
+          apiResponse = formatSentence(responseData);
+          isLoading = false;
         });
       } else {
         setState(() {
           apiResponse = 'Error al subir el video: ${response.statusCode}';
-          isLoading = false; // Oculta el indicador de carga
+          isLoading = false;
         });
       }
     } catch (e) {
       setState(() {
         apiResponse = 'Excepción: $e';
-        isLoading = false; // Oculta el indicador de carga en caso de error
+        isLoading = false;
       });
     }
   }
 
-  //Funcion de audio
   Future<void> _speak() async {
     if (apiResponse.isNotEmpty) {
-      await flutterTts.setPitch(3.0); // Ajusta el tono (1.0 es el valor normal)
-      await flutterTts.setSpeechRate(
-          0.3); // Ajusta la velocidad (0.5 - 1.5 es el rango usual)
-      await flutterTts.setVolume(1.0); // Ajusta el volumen (0.0 a 1.0)
-      await flutterTts
-          .setLanguage("es-MX"); // o usa "es-CO" para español de Colombia
+      await flutterTts.setPitch(3.0);
+      await flutterTts.setSpeechRate(0.3);
+      await flutterTts.setVolume(1.0);
+      await flutterTts.setLanguage("es-MX");
       await flutterTts.speak(apiResponse);
     }
   }
 
- String formatSentence(String input) {
-  // Separar las palabras por el guion
-  List<String> words = input.split('-');
-
-  // Verificar si la lista no está vacía
-  if (words.isEmpty) return "";
-
-  // Formatear la oración
-  String sentence = words.map((word) => word.trim()).join(' ');
-  
-  // Convertir la primera palabra en mayúscula
-  sentence = sentence[0].toUpperCase() + sentence.substring(1).toLowerCase();
-
-  // Verificar si la frase contiene "como estas"
-  if (sentence.contains("estas")) {
-    // Reemplazar "como estas" para asegurar que termine con "?"
-    sentence = sentence.replaceAll("estas", "estas?");
+  String formatSentence(String input) {
+    List<String> words = input.split('-');
+    if (words.isEmpty) return "";
+    String sentence = words.map((word) => word.trim()).join(' ');
+    sentence = sentence[0].toUpperCase() + sentence.substring(1).toLowerCase();
+    if (sentence.contains("estas")) {
+      sentence = sentence.replaceAll("estas", "estas?");
+    }
+    if (!sentence.endsWith('.') &&
+        !sentence.endsWith('?') &&
+        !sentence.endsWith('!')) {
+      sentence += '.';
+    }
+    return sentence;
   }
-
-  // Asegurar que la frase termine con un punto si no tiene otros signos
-  if (!sentence.endsWith('.') && !sentence.endsWith('?') && !sentence.endsWith('!')) {
-    sentence += '.';
-  }
-
-  return sentence;
-}
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context);
+
     return Scaffold(
       key: _scaffoldKey,
-      resizeToAvoidBottomInset: false,
       drawer: LinksDrawer(),
       body: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: const BoxDecoration(
+        height: MediaQuery.of(context).size.height,
+        padding: EdgeInsets.all(10.w),
+        decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/icons/fondo.png'),
             fit: BoxFit.cover,
           ),
         ),
-        child: Column(
-          children: [
-            // Icono de menú en la esquina superior izquierda y títulos
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Botón de menú hamburguesa en la esquina superior izquierda
-                IconButton(
-                  icon: const Icon(Icons.menu, color: Colors.black, size: 30),
-                  onPressed: () {
-                    _scaffoldKey.currentState?.openDrawer();
-                  },
-                ),
-                // Logo, título y subtítulo
-                const SizedBox(height: 20),
-                Image.asset(
-                  'assets/icons/logo.png',
-                  height: 180,
-                ),
-              ],
-            ),
-            const SizedBox(height: 50),
-            // Contenedor central (para el área de traducción)
-            Container(
-              width: 320,
-              height: 350,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Stack(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Área para mostrar el texto o el indicador de carga
-                  Center(
-                    child: isLoading
-                        ? const CircularProgressIndicator(
-                            color: Color(0xFF2F509D)) // Indicador de carga
-                        : Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 10),
-                            child: Text(
-                              apiResponse,
-                              maxLines: null,
-                              style: const TextStyle(
-                                  fontSize: 18, color: Colors.black),
+                  IconButton(
+                    icon: Icon(Icons.menu, color: Colors.black, size: 30.sp),
+                    onPressed: () {
+                      _scaffoldKey.currentState?.openDrawer();
+                    },
+                  ),
+                  Image.asset(
+                    'assets/icons/logo.png',
+                    height: 150.h,
+                    width: 150.w,
+                  ),
+                ],
+              ),
+              SizedBox(height: 40.h),
+              Container(
+                width: 280.w,
+                height: 250.h,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+                child: Stack(
+                  children: [
+                    Center(
+                      child: isLoading
+                          ? CircularProgressIndicator(color: Color(0xFF2F509D))
+                          : Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15.w, vertical: 10.h),
+                              child: Text(
+                                apiResponse,
+                                maxLines: null,
+                                style: TextStyle(
+                                  fontSize: 18.sp,
+                                  color: Colors.black,
+                                ),
+                              ),
                             ),
-                          ),
-                  ),
-                  // Icono de volumen
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.volume_up_rounded,
-                        size: 40,
-                        color: Colors.black,
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.volume_up_rounded,
+                          size: 40.sp,
+                          color: Colors.black,
+                        ),
+                        onPressed: _speak,
                       ),
-                      onPressed:
-                          _speak, // Llama a la función para leer el texto
                     ),
-                  ),
-                ],
-              ),
-            ),
-            const Spacer(),
-            Container(
-              width: 320,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.video_collection_rounded,
-                      color: const Color(0xFF2F509D),
-                      size: 45,
-                    ),
-                    onPressed: _pickVideo,
-                  ),
-                  //prueba--------------------------------------------
-                  IconButton(
-                    icon: Icon(
-                      Icons.horizontal_rule_sharp,
-                      color: const Color(0xFF2F509D),
-                      size: 50,
-                    ),
-                    onPressed: _pickVideoFake,
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.video_camera_front_rounded,
-                      color: const Color(0xFF2F509D),
-                      size: 50,
-                    ),
-                    onPressed: _recordVideo,
-                  ),
-                ],
-              ),
-            ),
-            const Spacer(),
-            // Iconos de la parte baja
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Image.asset(
-                  'assets/icons/texto_audio.png',
-                  height: 100,
+                  ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+              ),
+              SizedBox(height: 20.h),
+              Container(
+                width: 280.w,
+                height: 50.h,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     IconButton(
+                      icon: Icon(
+                        Icons.video_collection_rounded,
+                        color: Color(0xFF2F509D),
+                        size: 40.sp,
+                      ),
+                      onPressed: _pickVideo,
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.horizontal_rule_sharp,
+                        color: Color(0xFF2F509D),
+                        size: 40.sp,
+                      ),
+                      onPressed: _pickVideoFake,
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        Icons.video_camera_front_rounded,
+                        color: Color(0xFF2F509D),
+                        size: 40.sp,
+                      ),
+                      onPressed: _recordVideo,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 63.h),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Image.asset('assets/icons/texto_audio.png',
+                      height: 100.h, width: 100.w),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
                         onPressed: () async {
                           await Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => const HomePage()),
+                            MaterialPageRoute(builder: (context) => HomePage()),
                           );
                         },
                         icon: Image.asset(
                           'assets/icons/home.png',
-                          height: 55,
-                          color: const Color(0xFF2F509D),
-                        )),
-                    Image.asset(
-                      'assets/icons/perfil.png',
-                      height: 55,
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ],
+                          height: 55.h,
+                          width: 55.w,
+                          color: Color(0xFF2F509D),
+                        ),
+                      ),
+                      Image.asset('assets/icons/perfil.png',
+                          height: 55.h, width: 55.w),
+                    ],
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

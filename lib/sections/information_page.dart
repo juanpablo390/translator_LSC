@@ -75,6 +75,7 @@ class InformationPage extends StatelessWidget {
                         SizedBox(width: 10.w), // Espaciado dinámico entre icono y texto
                         Text(
                           'Términos y condiciones',
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 20.sp, // Usar .sp para el tamaño de texto
                             fontWeight: FontWeight.normal,
@@ -84,6 +85,7 @@ class InformationPage extends StatelessWidget {
                       ],
                     ),
                   ),
+                  SizedBox(height: 10.h)
                 ],
               ),
             ),

@@ -7,37 +7,34 @@ class ServicesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Inicializamos ScreenUtil para que las unidades responsivas funcionen
     ScreenUtil.init(context);
-
+    
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: SingleChildScrollView(
-        child: Container(
-          height: MediaQuery.of(context).size.height, 
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/icons/fondo.png'),
-              fit: BoxFit.cover,
-            ),
+      body: Container(
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/icons/fondo.png'),
+            fit: BoxFit.cover,
           ),
-          padding: EdgeInsets.all(10.0.sp),
+        ),
+        padding: EdgeInsets.all(10.0.w), // Usando ScreenUtil para tamaños adaptables
+        child: SingleChildScrollView(
           child: Column(
             children: [
-              // Título de la sección
+              SizedBox(height: 50.h), // Uso de ScreenUtil para ajustar el espacio
               Text(
                 "PLANES DE SERVICIO",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 30.sp,
+                  fontSize: 30.sp, // Usando ScreenUtil para el tamaño de fuente
                   fontWeight: FontWeight.w900,
                   color: Colors.black,
                   fontStyle: FontStyle.italic,
                 ),
               ),
               SizedBox(height: 10.h),
-              
-              // Row de los planes
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -59,8 +56,6 @@ class ServicesPage extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 16.h),
-              
-              // Row con los otros dos planes
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -80,6 +75,7 @@ class ServicesPage extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(height: 16.h),
             ],
           ),
         ),
@@ -87,67 +83,75 @@ class ServicesPage extends StatelessWidget {
     );
   }
 
-  // Método para construir las tarjetas de los planes
   Widget buildPlanCard(BuildContext contextButton, String title, String price,
       String description, String buttonText) {
     return Column(
       children: [
         Container(
-          width: 120.w,
-          height: 250.h, 
-          padding: EdgeInsets.symmetric(vertical: 8.sp),
+          width: 120.w, // Ajuste del ancho con ScreenUtil
+          height: 300.h, // Ajuste de la altura con ScreenUtil
+          padding: EdgeInsets.symmetric(vertical: 8.0.h),
           decoration: BoxDecoration(
             color: Colors.yellow[300],
-            border: Border.all(color: const Color(0xFF032868), width: 5.sp),
+            border: Border.all(color: const Color(0xFF032868), width: 5.w),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                title,
-                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                price,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.red,
+          child: SingleChildScrollView( // Agregar un scroll dentro del card
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                      fontSize: 18.sp, fontWeight: FontWeight.bold),
                 ),
-              ),
-              SizedBox(height: 10.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10.sp),
-                child: Text(
-                  description,
-                  textAlign: TextAlign.start,
-                  style: TextStyle(fontSize: 13.sp),
+                SizedBox(height: 8.h),
+                Text(
+                  price,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
                 ),
-              ),
-            ],
+                SizedBox(height: 10.h),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10.0.w),
+                  child: Text(
+                    description,
+                    textAlign: TextAlign.start,
+                    style: TextStyle(fontSize: 13.sp),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-        ElevatedButton(
-          onPressed: () async {
-            await Navigator.push(
-              contextButton,
-              MaterialPageRoute(builder: (context) => const HomePage()),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFF032868),
-            padding: EdgeInsets.symmetric(horizontal: 16.sp, vertical: 1.sp),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.sp)),
-          ),
-          child: Text(
-            buttonText,
-            style: TextStyle(
-              fontSize: 16.sp,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
+        SizedBox(height: 10.h),
+        SizedBox(
+          height: 40.h,
+          width: 110.w,
+          child: ElevatedButton(
+            onPressed: () async {
+              await Navigator.push(
+                contextButton,
+                MaterialPageRoute(builder: (context) => const HomePage()),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF032868),
+              padding: EdgeInsets.symmetric(horizontal: 0.w, vertical: 1.h),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+            ),
+            child: Text(
+              buttonText,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 16.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),
