@@ -8,7 +8,7 @@ class ServicesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context);
-    
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -19,64 +19,66 @@ class ServicesPage extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        padding: EdgeInsets.all(10.0.w), // Usando ScreenUtil para tamaños adaptables
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: 50.h), // Uso de ScreenUtil para ajustar el espacio
-              Text(
-                "PLANES DE SERVICIO",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 30.sp, // Usando ScreenUtil para el tamaño de fuente
-                  fontWeight: FontWeight.w900,
-                  color: Colors.black,
-                  fontStyle: FontStyle.italic,
+        padding:
+            EdgeInsets.all(30.w), // Usando ScreenUtil para tamaños adaptables
+        child: Center(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // titulo
+                Text(
+                  "PLANES DE SERVICIO",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize:
+                        30.sp, // Usando ScreenUtil para el tamaño de fuente
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
                 ),
-              ),
-              SizedBox(height: 10.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  buildPlanCard(
-                    context,
-                    'Gratis',
-                    '0 \$',
-                    '• Acceso al traductor 3 veces al día.\n• Contenido de anuncios publicitarios.',
-                    ' GO NOW ',
-                  ),
-                  SizedBox(width: 10.w),
-                  buildPlanCard(
-                    context,
-                    'BÁSICO',
-                    '35.000 \$',
-                    '• Suscripción por 30 días.\n• Acceso ilimitado al traductor.\n• Sin contenido de anuncios publicitarios.',
-                    'BUY NOW',
-                  ),
-                ],
-              ),
-              SizedBox(height: 16.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  buildPlanCard(
-                    context,
-                    'ESTANDAR',
-                    '70.000 \$',
-                    '• Suscripción por 6 meses.\n• Acceso ilimitado al traductor.\n• Sin contenido de anuncios publicitarios.',
-                    'BUY NOW',
-                  ),
-                  buildPlanCard(
-                    context,
-                    'PREMIUM',
-                    '600.000 \$',
-                    '• Suscripción por 12 meses.\n• Acceso ilimitado al traductor.\n• Sin contenido de anuncios publicitarios.',
-                    'BUY NOW',
-                  ),
-                ],
-              ),
-              SizedBox(height: 16.h),
-            ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    buildPlanCard(
+                      context,
+                      'Gratis',
+                      '0 \$',
+                      '• Acceso al traductor 5 veces al día.\n• Contenido de anuncios publicitarios.',
+                      'GO NOW',
+                    ),
+                    SizedBox(width: 10.w),
+                    buildPlanCard(
+                      context,
+                      'BÁSICO',
+                      '70.000 \$',
+                      '• Suscripción por 30 días.\n• Acceso ilimitado al traductor.\n• Sin contenido de anuncios publicitarios.',
+                      'BUY NOW',
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    buildPlanCard(
+                      context,
+                      'ESTANDAR',
+                      '360.000 \$',
+                      '• Suscripción por 6 meses.\n• Acceso ilimitado al traductor.\n• Sin contenido de anuncios publicitarios.',
+                      'BUY NOW',
+                    ),
+                    buildPlanCard(
+                      context,
+                      'PREMIUM',
+                      '600.000 \$',
+                      '• Suscripción por un año.\n• Acceso ilimitado al traductor.\n• Sin contenido de anuncios publicitarios.',
+                      'BUY NOW',
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -88,21 +90,23 @@ class ServicesPage extends StatelessWidget {
     return Column(
       children: [
         Container(
-          width: 120.w, // Ajuste del ancho con ScreenUtil
-          height: 300.h, // Ajuste de la altura con ScreenUtil
-          padding: EdgeInsets.symmetric(vertical: 8.0.h),
+          width: 130.w, // Ajuste del ancho con ScreenUtil
+          height: 220.h, // Ajuste de la altura con ScreenUtil
+          padding: EdgeInsets.symmetric(vertical: 8.0.h, horizontal: 8.0.w),
           decoration: BoxDecoration(
             color: Colors.yellow[300],
-            border: Border.all(color: const Color(0xFF032868), width: 5.w),
+            border: Border.all(color: const Color(0xFF032868), width: 3.w),
+            borderRadius: BorderRadius.circular(10),
           ),
-          child: SingleChildScrollView( // Agregar un scroll dentro del card
+          child: SingleChildScrollView(
+            // Agregar un scroll dentro del card
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                      fontSize: 18.sp, fontWeight: FontWeight.bold),
+                  style:
+                      TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 8.h),
                 Text(
@@ -115,13 +119,10 @@ class ServicesPage extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 10.h),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10.0.w),
-                  child: Text(
-                    description,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(fontSize: 13.sp),
-                  ),
+                Text(
+                  description,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(fontSize: 13.sp),
                 ),
               ],
             ),
@@ -129,19 +130,36 @@ class ServicesPage extends StatelessWidget {
         ),
         SizedBox(height: 10.h),
         SizedBox(
-          height: 40.h,
+          height: 35.h,
           width: 110.w,
           child: ElevatedButton(
             onPressed: () async {
-              await Navigator.push(
-                contextButton,
-                MaterialPageRoute(builder: (context) => const HomePage()),
-              );
+              if (buttonText == 'GO NOW') {
+                await Navigator.push(
+                  contextButton,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                );
+              } else if (buttonText == 'BUY NOW') {
+                showDialog(
+                  context: contextButton,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Información'),
+                    content: const Text('Por favor, comuníquese con nosotros al +57 999 999 999 para más información sobre la compra de nuestros servicios.'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF032868),
               padding: EdgeInsets.symmetric(horizontal: 0.w, vertical: 1.h),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5)),
             ),
             child: Text(
               buttonText,

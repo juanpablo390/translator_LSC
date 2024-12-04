@@ -11,7 +11,7 @@ import 'package:mime/mime.dart';
 import 'package:http_parser/http_parser.dart';
 
 class SignTranslatorPage extends StatefulWidget {
-  SignTranslatorPage({super.key});
+  const SignTranslatorPage({super.key});
 
   @override
   State<SignTranslatorPage> createState() => _SignTranslatorPageState();
@@ -148,137 +148,143 @@ class _SignTranslatorPageState extends State<SignTranslatorPage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.menu, color: Colors.black, size: 30.sp),
-                    onPressed: () {
-                      _scaffoldKey.currentState?.openDrawer();
-                    },
-                  ),
-                  Image.asset(
-                    'assets/icons/logo.png',
-                    height: 150.h,
-                    width: 150.w,
-                  ),
-                ],
-              ),
-              SizedBox(height: 40.h),
-              Container(
-                width: 280.w,
-                height: 250.h,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-                child: Stack(
+        child: Stack(children: [
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                // Contenido principal
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
-                      child: isLoading
-                          ? CircularProgressIndicator(color: Color(0xFF2F509D))
-                          : Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15.w, vertical: 10.h),
-                              child: Text(
-                                apiResponse,
-                                maxLines: null,
-                                style: TextStyle(
-                                  fontSize: 18.sp,
-                                  color: Colors.black,
+                    IconButton(
+                      icon: Icon(Icons.menu, color: Colors.black, size: 30.sp),
+                      onPressed: () {
+                        _scaffoldKey.currentState?.openDrawer();
+                      },
+                    ),
+                    Image.asset(
+                      'assets/icons/logo.png',
+                      height: 130.h,
+                      width: 130.w,
+                    ),
+                  ],
+                ),
+                SizedBox(height: 40.h),
+                //
+                Container(
+                  width: 280.w,
+                  height: 250.h,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  child: Stack(
+                    children: [
+                      Center(
+                        child: isLoading
+                            ? CircularProgressIndicator(
+                                color: Color(0xFF2F509D))
+                            : Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15.w, vertical: 10.h),
+                                child: Text(
+                                  apiResponse,
+                                  maxLines: null,
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    color: Colors.black,
+                                  ),
                                 ),
                               ),
-                            ),
-                    ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.volume_up_rounded,
-                          size: 40.sp,
-                          color: Colors.black,
-                        ),
-                        onPressed: _speak,
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20.h),
-              Container(
-                width: 280.w,
-                height: 50.h,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.video_collection_rounded,
-                        color: Color(0xFF2F509D),
-                        size: 40.sp,
-                      ),
-                      onPressed: _pickVideo,
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.horizontal_rule_sharp,
-                        color: Color(0xFF2F509D),
-                        size: 40.sp,
-                      ),
-                      onPressed: _pickVideoFake,
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.video_camera_front_rounded,
-                        color: Color(0xFF2F509D),
-                        size: 40.sp,
-                      ),
-                      onPressed: _recordVideo,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 63.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Image.asset('assets/icons/texto_audio.png',
-                      height: 100.h, width: 100.w),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => HomePage()),
-                          );
-                        },
-                        icon: Image.asset(
-                          'assets/icons/home.png',
-                          height: 55.h,
-                          width: 55.w,
-                          color: Color(0xFF2F509D),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.volume_up_rounded,
+                            size: 40.sp,
+                            color: Colors.black,
+                          ),
+                          onPressed: _speak,
                         ),
                       ),
-                      Image.asset('assets/icons/perfil.png',
-                          height: 55.h, width: 55.w),
                     ],
                   ),
-                ],
-              )
-            ],
+                ),
+                SizedBox(height: 20.h),
+                Container(
+                  width: 280.w,
+                  height: 50.h,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.video_collection_rounded,
+                          color: Color(0xFF2F509D),
+                          size: 40.sp,
+                        ),
+                        onPressed: _pickVideo,
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.horizontal_rule_sharp,
+                          color: Color(0xFFF49F38),
+                          size: 40.sp,
+                        ),
+                        onPressed: _pickVideoFake,
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.video_camera_front_rounded,
+                          color: Color(0xFF2F509D),
+                          size: 40.sp,
+                        ),
+                        onPressed: _recordVideo,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+          //
+          Positioned(
+            bottom: 0.h,
+            left: 0.w,
+            child: Image.asset('assets/icons/texto_audio.png',
+                height: 100.h, width: 100.w),
+          ),
+          Positioned(
+              bottom: 0.h,
+              right: 0.w,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    onPressed: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                      );
+                    },
+                    icon: Image.asset(
+                      'assets/icons/home.png',
+                      height: 55.h,
+                      width: 55.w,
+                      color: Color(0xFF2F509D),
+                    ),
+                  ),
+                  Image.asset('assets/icons/perfil.png',
+                      height: 55.h, width: 55.w),
+                ],
+              ))
+        ]),
       ),
     );
   }

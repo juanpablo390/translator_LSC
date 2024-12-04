@@ -6,7 +6,7 @@ class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
@@ -18,19 +18,40 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  void _selectBirthDate(BuildContext context) async {
+  Future<void> _selectBirthDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor:
+                Color(0xFF2F509D), // Color principal (barra superior y botones)
+            hintColor: Color(0xFFF49F38), // Color para el ícono de selección
+            colorScheme: ColorScheme.light(
+              primary: Color(0xFF2F509D), // Color principal
+              onPrimary:
+                  Colors.white, // Color del texto sobre el color principal
+              onSurface: Colors.black, // Color del texto en general
+            ),
+            dialogBackgroundColor: Colors.white, // Fondo del calendario
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Color(0xFFF49F38), // Color del botón de texto
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
 
     if (pickedDate != null) {
-      setState(() {
-        _birthDateController.text =
-            "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
-      });
+      // Actualiza el controlador con la fecha seleccionada
+      _birthDateController.text =
+          "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
     }
   }
 
@@ -46,9 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Inicializamos ScreenUtil
     ScreenUtil.init(context);
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -60,52 +79,70 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         child: Center(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 30.w), // Usamos 'w' para la dimensión
+            padding: EdgeInsets.symmetric(horizontal: 30.w),
             child: Form(
               key: _formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  //Titulo
                   Center(
                     child: Text(
                       "Crea una \n cuenta nueva",
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 32.sp, // Usamos 'sp' para tamaño de texto
+                        fontSize: 32.sp,
                         fontWeight: FontWeight.bold,
                         color: const Color(0xFFF49F38),
                       ),
                     ),
                   ),
-                  const Divider(color: Color(0xFF062959), thickness: 2),
-                  SizedBox(height: 20.h), // Usamos 'h' para el alto de espacio
+                  // Divider
+                  const Divider(color: Color(0xFF2F509D), thickness: 2),
+                  SizedBox(height: 15.h),
+                  // Label Usuario
                   _buildLabel('Usuario'),
                   _buildTextField(_nameController, "Ingresa tu usuario"),
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 15.h),
+                  // Label Email
                   _buildLabel('Email'),
                   _buildTextField(_emailController, "Ingresa tu correo",
                       keyboardType: TextInputType.emailAddress),
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 15.h),
+                  // Label Password
                   _buildLabel('Contraseña'),
                   _buildTextField(
                     _passwordController,
                     "Crea una contraseña",
                     obscureText: true,
                   ),
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 15.h),
+                  // Label Fecha de nacimiento
                   _buildLabel('Fecha de nacimiento'),
                   TextFormField(
                     controller: _birthDateController,
                     readOnly: true,
                     decoration: InputDecoration(
                       suffixIcon: IconButton(
-                        icon: const Icon(Icons.calendar_today),
+                        icon: const Icon(Icons.calendar_month_rounded),
                         onPressed: () => _selectBirthDate(context),
                       ),
                       fillColor: Colors.white,
                       filled: true,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5)),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: Color(0xFF2F509D),
+                          width: 1,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: const Color(0xFFF49F38),
+                          width: 1.5,
+                        ),
+                      ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -114,13 +151,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 15.h),
+                  // Label Sexo
                   _buildLabel('Sexo'),
                   DropdownButtonFormField<String>(
                     value: _selectedGender,
                     items: const [
-                      DropdownMenuItem(value: "Masculino", child: Text("Masculino")),
-                      DropdownMenuItem(value: "Femenino", child: Text("Femenino")),
+                      DropdownMenuItem(
+                          value: "Masculino", child: Text("Masculino")),
+                      DropdownMenuItem(
+                          value: "Femenino", child: Text("Femenino")),
                       DropdownMenuItem(value: "Otro", child: Text("Otro")),
                     ],
                     onChanged: (value) {
@@ -131,8 +171,19 @@ class _RegisterPageState extends State<RegisterPage> {
                     decoration: InputDecoration(
                       fillColor: Colors.white,
                       filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: Color(0xFF2F509D),
+                          width: 1,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: const Color(0xFFF49F38),
+                          width: 1.5,
+                        ),
                       ),
                     ),
                     validator: (value) {
@@ -142,26 +193,27 @@ class _RegisterPageState extends State<RegisterPage> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20.h),
-                  const Divider(color: Color(0xFF062959), thickness: 2),
-                  SizedBox(height: 10.h),
+                  SizedBox(height: 15.h),
+                  // Divider
+                  const Divider(color: Color(0xFF2F509D), thickness: 2),
+                  SizedBox(height: 15.h),
                   Center(
                     child: SizedBox(
-                      width: 0.8.sw, // 80% del ancho de la pantalla
-                      height: 0.065.sh, // 6.5% de la altura de la pantalla
+                      width: 300.w,
+                      height: 45.h,
                       child: ElevatedButton(
                         onPressed: _register,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color.fromARGB(255, 72, 73, 75),
+                          backgroundColor: const Color(0xFF2F509D),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                         ),
                         child: Text(
                           'Registrar',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 18.sp, // Usamos 'sp' para texto adaptado
+                            fontSize: 18.sp,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                           ),
@@ -169,7 +221,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 40.h)
                 ],
               ),
             ),
@@ -184,8 +235,8 @@ class _RegisterPageState extends State<RegisterPage> {
       text,
       style: TextStyle(
         fontSize: 16.sp,
-        fontWeight: FontWeight.bold,
-        color: const Color(0xFF062959),
+        fontWeight: FontWeight.w600,
+        color: const Color(0xFF26407E),
       ),
     );
   }
@@ -204,8 +255,19 @@ class _RegisterPageState extends State<RegisterPage> {
         fillColor: Colors.white,
         filled: true,
         hintText: hintText,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: Color(0xFF2F509D),
+            width: 1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: const Color(0xFFF49F38),
+            width: 1.5,
+          ),
         ),
       ),
       validator: (value) {

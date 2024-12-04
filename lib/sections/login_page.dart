@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context);
-    
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -56,14 +56,15 @@ class _LoginPageState extends State<LoginPage> {
         child: Center(
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              padding: EdgeInsets.symmetric(horizontal: 30.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
                     'assets/icons/logo.png',
-                    height: 240.h,
+                    height: 200.h,
+                    width: 200.w,
                   ),
                   Text(
                     'BIENVENIDOS',
@@ -73,42 +74,56 @@ class _LoginPageState extends State<LoginPage> {
                       color: const Color(0xFFF49F38),
                     ),
                   ),
-                  SizedBox(height: 40.h),
+                  SizedBox(height: 20.h),
+                  //Label Usuario
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Usuario',
                       style: TextStyle(
                         fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF062959),
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF26407E),
                       ),
                     ),
                   ),
+                  //Input Usuario
                   TextField(
                     controller: _userController,
                     cursorColor: Colors.black,
                     decoration: InputDecoration(
                       fillColor: Colors.white,
                       filled: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(color: Colors.grey),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: Color(0xFF2F509D),
+                          width: 1,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: const Color(0xFFF49F38),
+                          width: 1.5,
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 15.h),
+                  //Label Contraseña
                   const Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Contraseña',
                       style: TextStyle(
                         fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF062959),
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF26407E),
                       ),
                     ),
                   ),
+                  //Input contraseña
                   TextField(
                     controller: _passwordController,
                     obscureText: _isObscured,
@@ -116,9 +131,19 @@ class _LoginPageState extends State<LoginPage> {
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
-                        borderSide: const BorderSide(color: Colors.grey),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: Color(0xFF2F509D),
+                          width: 1,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(
+                          color: const Color(0xFFF49F38),
+                          width: 1.5,
+                        ),
                       ),
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -141,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF2F509D),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       child: Text(
@@ -155,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 10.h),
                   TextButton(
                     onPressed: () async {
                       await Navigator.push(
@@ -165,7 +190,9 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     child: Text(
                       '¿No tienes cuenta? Regístrate aquí',
-                      style: TextStyle(color: Colors.white, fontSize: 16.sp),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14.sp,),
                     ),
                   ),
                 ],

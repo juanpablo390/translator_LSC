@@ -4,7 +4,7 @@ import 'package:translate_lsc/componentes/links_drawer.dart';
 import 'package:translate_lsc/sections/home_page.dart';
 
 class TextTranslatorPage extends StatefulWidget {
-  TextTranslatorPage({super.key});
+  const TextTranslatorPage({super.key});
 
   @override
   State<TextTranslatorPage> createState() => _TextTranslatorPageState();
@@ -202,155 +202,198 @@ class _TextTranslatorPageState extends State<TextTranslatorPage>
       drawer: LinksDrawer(),
       body: Container(
         height: MediaQuery.of(context).size.height,
-        padding: EdgeInsets.all(10.sp),
+        padding: EdgeInsets.all(10.w),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/icons/fondo.png'),
             fit: BoxFit.cover,
           ),
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize
-                .min, // Asegura que el Column no ocupe más espacio del necesario
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.menu, color: Colors.black, size: 30.sp),
-                    onPressed: () {
-                      _scaffoldKey.currentState?.openDrawer();
-                    },
-                  ),
-                  Image.asset('assets/icons/logo.png',
-                      height: 180.h, width: 180.w),
-                ],
-              ),
-              if (_isAnimating || _animationFinished)
-                Column(
+        child: Stack(children: [
+          SingleChildScrollView(
+            child: Column(
+              children: [
+                // Contenido principal
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (_animationOpacity == 0.0)
-                      CircularProgressIndicator(
-                        color: Color(0xFF2F509D),
-                      ),
-                    AnimatedOpacity(
-                      opacity: _animationOpacity,
-                      duration: Duration(milliseconds: 0),
-                      child: AnimatedBuilder(
-                        animation: _frameAnimation,
-                        builder: (context, child) {
-                          return _words.isNotEmpty
-                              ? Image.asset(
-                                  'assets/signs/${_words[_currentWordIndex]}/frame_${_frameAnimation.value.round()}.jpg',
-                                  width: 450.w,
-                                  height: 350.h,
-                                )
-                              : Container();
-                        },
-                      ),
+                    IconButton(
+                      icon: Icon(Icons.menu, color: Colors.black, size: 30.sp),
+                      onPressed: () {
+                        _scaffoldKey.currentState?.openDrawer();
+                      },
                     ),
-                    SizedBox(height: 20.h),
-                    if (_unavailableWords.isNotEmpty)
-                      Text(
-                        'Palabras no disponibles: ${_unavailableWords.join(', ')}',
-                        style: TextStyle(color: Colors.red, fontSize: 16.sp),
-                      ),
-                    if (!_isAnimating)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                            onPressed: _startAnimation,
-                            child: Text('Reproducir',
-                                style: TextStyle(color: Colors.black)),
-                          ),
-                          SizedBox(width: 10.w),
-                          ElevatedButton(
-                            onPressed: _resetForNewTranslation,
-                            child: Text('Nueva traducción',
-                                style: TextStyle(color: Colors.black)),
-                          ),
-                        ],
-                      ),
-                  ],
-                )
-              else
-                Column(
-                  children: [
-                    SizedBox(height: 40.h),
-                    Container(
-                      width: 280.w,
-                      height: 250.h,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10.r),
-                      ),
-                      child: Stack(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15.w, vertical: 10.h),
-                            child: TextField(
-                              focusNode: _focusNode,
-                              controller: _textController,
-                              onChanged: _updateWords,
-                              decoration: InputDecoration(
-                                hintText: "Escribe o habla aquí",
-                                border: InputBorder.none,
-                              ),
-                              maxLines: null,
-                              style: TextStyle(
-                                  fontSize: 18.sp, color: Colors.black),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: IconButton(
-                              icon: Icon(Icons.check,
-                                  size: 40.sp, color: Colors.black),
-                              onPressed: _startAnimation,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    Image.asset('assets/icons/logo.png',
+                        height: 130.h, width: 130.w),
                   ],
                 ),
-              SizedBox(height: 103.h),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Image.asset('assets/icons/audio_texto.png',
-                      height: 100.h, width: 100.w),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                //
+                if (_isAnimating || _animationFinished)
+                  Column(
                     children: [
-                      IconButton(
-                        onPressed: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => HomePage()),
-                          );
-                        },
-                        icon: Image.asset(
-                          'assets/icons/home.png',
-                          height: 55.h,
-                          width: 55.w,
+                      SizedBox(height: 40.h),
+                      if (_animationOpacity == 0.0)
+                        CircularProgressIndicator(
                           color: Color(0xFF2F509D),
                         ),
+                      AnimatedOpacity(
+                        opacity: _animationOpacity,
+                        duration: Duration(milliseconds: 0),
+                        child: AnimatedBuilder(
+                          animation: _frameAnimation,
+                          builder: (context, child) {
+                            return _words.isNotEmpty
+                                ? Image.asset(
+                                    'assets/signs/${_words[_currentWordIndex]}/frame_${_frameAnimation.value.round()}.jpg',
+                                    width: 450.w,
+                                    height: 250.h,
+                                  )
+                                : Container();
+                          },
+                        ),
                       ),
-                      Image.asset('assets/icons/perfil.png',
-                          height: 55.h, width: 55.w),
+                      if (_unavailableWords.isNotEmpty && _unavailableWords.every((w) => w != ' ') )
+                        Text(
+                          'Palabras no disponibles: ${_unavailableWords.join(', ')}',
+                          style: TextStyle(color: Colors.red, fontSize: 16.sp),
+                        ),
+                      if (!_isAnimating)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            // Botón "Reproducir"
+                            SizedBox(
+                              width: 155.w,
+                              height: 35.h,
+                              child: ElevatedButton.icon(
+                                onPressed: _startAnimation,
+                                icon: Icon(Icons.play_arrow, color: Colors.white),
+                                label: Text(
+                                  'Reproducir',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.all(0),
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: const Color(0xFFF49F38), // Color del texto
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  elevation: 2, // Ligera sombra
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 10.w), // Espacio entre botones
+                            // Botón "Nueva traducción"
+                            SizedBox(
+                              width: 155.w,
+                              height: 35.h,
+                              child: ElevatedButton.icon(
+                              onPressed: _resetForNewTranslation,
+                              icon: Icon(Icons.refresh, color: Colors.white),
+                              label: Text(
+                                'Nueva traducción',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 13.sp,
+                                   fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                padding: EdgeInsets.all(0),
+                                foregroundColor: Colors.white,
+                                backgroundColor: const Color(0xFF2F509D) ,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                elevation: 2, // Ligera sombra
+                              ),
+                            )),
+                          ],
+                        ),
+                    ],
+                  )
+                else
+                  Column(
+                    children: [
+                      SizedBox(height: 80.h),
+                      Container(
+                        width: 280.w,
+                        height: 250.h,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(10.r),
+                        ),
+                        child: Stack(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15.w, vertical: 10.h),
+                              child: TextField(
+                                cursorColor: Colors.black,
+                                focusNode: _focusNode,
+                                controller: _textController,
+                                onChanged: _updateWords,
+                                decoration: InputDecoration(
+                                    hintText: "Escribe o habla aquí",
+                                    border: InputBorder.none),
+                                maxLines: null,
+                                style: TextStyle(
+                                    fontSize: 18.sp, color: Colors.black),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.bottomRight,
+                              child: IconButton(
+                                icon: Icon(Icons.check,
+                                    size: 40.sp, color: Colors.black),
+                                onPressed: _startAnimation,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
+          Positioned(
+            bottom: 0.h,
+            child: Image.asset('assets/icons/audio_texto.png',
+                height: 100.h, width: 100.w),
+          ),
+          Positioned(
+            bottom: 0.h,
+            right: 0.w,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  onPressed: () async {
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
+                  },
+                  icon: Image.asset(
+                    'assets/icons/home.png',
+                    height: 55.h,
+                    width: 55.w,
+                    color: Color(0xFF2F509D),
+                  ),
+                ),
+                Image.asset('assets/icons/perfil.png',
+                    height: 55.h, width: 55.w),
+              ],
+            ),
+          )
+        ]),
       ),
     );
   }

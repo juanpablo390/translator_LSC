@@ -28,14 +28,12 @@ class _TermsPageState extends State<TermsPage> {
         ),
         child: Center(
           child: Padding(
-            padding:
-                EdgeInsets.symmetric(horizontal: 30.w), // Usar .w para el ancho
+            padding: EdgeInsets.symmetric(horizontal: 30.w),
             child: SingleChildScrollView(
-              // Permite el desplazamiento de la página
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  SizedBox(height: 20.h),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
@@ -43,8 +41,7 @@ class _TermsPageState extends State<TermsPage> {
                         "Términos y condiciones",
                         style: TextStyle(
                           fontSize: 20.sp, // Usar .sp para el tamaño de fuente
-                          fontFamily: 'Roboto',
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
                       ),
@@ -57,53 +54,89 @@ class _TermsPageState extends State<TermsPage> {
                   ),
                   SizedBox(height: 20.h), // Espaciado dinámico
                   Text(
-                    "El usuario se compromete a leer los términos y condiciones aquí establecidas, previamente a ú descarga de la aplicación, por tanto, en caso de realzar la instalación se entiende que cuenta con el conocimiento integral de este documento y la consecuente aceptación de la totalidad de sus estipulaciones.\n El Usuario reconoce que el ingreso de su información persona, y los datos que contiene la aplicación a su disposición respecto a los servicios brindados por la app ComSeñas, la realizan de manera voluntaria, quienes optan por acceder a esta aplicación en Colombia, lo hacen por iniciativa propia y son respondables del cumplimiento de las leyes locales, en la medida en que dichas leyes sean aplicables en su correspondiente país.\n\n En la aplicación se pondrá a disposición del CLIENTE información y/o permitirá la realización de las transacciones determinadas o habitadas por ComSeñas para cada producto en particular. ComSeñas podrá adicionar, modificar o eliminar las funcionalidades en cualquier momento, lo cual acepta el usuario mediante la instalación de la aplicación. En todo caso, al momento de realizar dichas modificaciones se notificarán al usuario a través de la misma aplicación móvil una vez inicie sesión.",
+                    "El usuario se compromete a leer los términos y condiciones aquí establecidas, previamente a ú descarga de la aplicación, por tanto, en caso de realzar la instalación se entiende que cuenta con el conocimiento integral de este documento y la consecuente aceptación de la totalidad de sus estipulaciones.\n\n El Usuario reconoce que el ingreso de su información persona, y los datos que contiene la aplicación a su disposición respecto a los servicios brindados por la app ComSeñas, la realizan de manera voluntaria, quienes optan por acceder a esta aplicación en Colombia, lo hacen por iniciativa propia y son respondables del cumplimiento de las leyes locales, en la medida en que dichas leyes sean aplicables en su correspondiente país.\n\n En la aplicación se pondrá a disposición del CLIENTE información y/o permitirá la realización de las transacciones determinadas o habitadas por ComSeñas para cada producto en particular. ComSeñas podrá adicionar, modificar o eliminar las funcionalidades en cualquier momento, lo cual acepta el usuario mediante la instalación de la aplicación. En todo caso, al momento de realizar dichas modificaciones se notificarán al usuario a través de la misma aplicación móvil una vez inicie sesión.",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
-                      fontSize: 14.sp, // Usar .sp para el tamaño de fuente
+                      fontSize: 13.sp,
                       fontWeight: FontWeight.normal,
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 10.h), // Espaciado dinámico
+                  SizedBox(height: 10.h),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: Checkbox(
-                          value: isChecked,
-                          onChanged: (bool? newValue) {
-                            setState(() {
-                              isChecked = newValue!;
-                            });
-                          },
+                      Checkbox(
+                        value: isChecked,
+                        checkColor: const Color(0xFFF49F38),
+                        activeColor: const Color.fromARGB(0, 0, 64, 214),
+                        materialTapTargetSize: MaterialTapTargetSize.padded,
+                        visualDensity: VisualDensity.adaptivePlatformDensity,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
                         ),
+                        onChanged: (bool? newValue) {
+                          setState(() {
+                            isChecked = newValue!;
+                          });
+                        },
                       ),
-                      Text(
-                        'Acepto los términos y condiciones',
-                        style: TextStyle(
-                          fontSize: 16.sp, // Usar .sp para el tamaño de fuente
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                      Flexible(
+                        child: TextButton(
+                            onPressed: () {
+                              setState(() {
+                                isChecked = !isChecked;
+                              });
+                            },
+                            child: Text(
+                              'Acepto los términos y condiciones',
+                              softWrap:
+                                  true, // Permite que el texto se ajuste a la línea
+                              maxLines: 2, overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize:
+                                    15.sp, // Usar .sp para el tamaño de fuente
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            )),
                       ),
                     ],
                   ),
                   SizedBox(height: 10.h), // Espaciado dinámico
                   SizedBox(
-                    width: 270.w,
-                    height: 50.h,
+                    width: 300.w,
+                    height: 45.h,
                     child: ElevatedButton(
                       onPressed: () async {
-                        await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const ServicesPage()),
-                        );
+                        if (!isChecked) {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Error'),
+                              content: const Text(
+                                  'Debe aceptar los terminos y condiciones para continuar'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('OK'),
+                                ),
+                              ],
+                            ),
+                          );
+                          return;
+                        } else {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ServicesPage()),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 68, 68, 68),
+                        backgroundColor: const Color(0xFF2F509D),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5)),
+                            borderRadius: BorderRadius.circular(8)),
                       ),
                       child: Text(
                         'CONTINUAR',
@@ -111,12 +144,11 @@ class _TermsPageState extends State<TermsPage> {
                         style: TextStyle(
                           fontSize: 18.sp, // Usar .sp para el tamaño de fuente
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: const Color(0xFFFFFFFF),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 10.h)
                 ],
               ),
             ),

@@ -18,7 +18,8 @@ class TraductorComSenhasApp extends StatelessWidget {
       builder: (context, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          home:  LoginPage(),
+          theme: ThemeData(fontFamily: 'Akshar'),
+          home: LoginPage(),
         );
       },
     );

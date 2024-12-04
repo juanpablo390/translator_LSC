@@ -41,10 +41,11 @@ dependencies:
   path: ^1.9.0
   http_parser: ^4.0.2
   mime: ^2.0.0
-  camera: ^0.11.0+2
   permission_handler: ^11.3.1
   flutter_screenutil: ^5.9.3
   url_launcher: ^6.3.1
+
+
 
 dev_dependencies:
   flutter_test:
@@ -109,7 +110,16 @@ flutter:
     - assets/signs/valentina/
     - assets/signs/22/
 
-    
+  fonts:
+    - family: Akshar
+      fonts:
+        - asset: assets/fonts/Akshar-Bold.ttf
+        - asset: assets/fonts/Akshar-SemiBold.ttf
+        - asset: assets/fonts/Akshar-Regular.ttf
+        - asset: assets/fonts/Akshar-Medium.ttf
+        - asset: assets/fonts/Akshar-Light.ttf
+          weight: 700
+
 
 
   # The following line ensures that the Material Icons font is

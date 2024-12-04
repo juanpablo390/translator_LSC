@@ -19,18 +19,19 @@ class InformationPage extends StatelessWidget {
         ),
         child: Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w), // Usar .w para el ancho
-            child: SingleChildScrollView( // Aseguramos que todo sea desplazable
+            padding: EdgeInsets.symmetric(horizontal: 30.w),
+            child: SingleChildScrollView(
+              // Aseguramos que todo sea desplazable
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
                     'assets/icons/logo.png',
-                    height: 300.h, // Usar .h para la altura de la imagen
-                    width: 300.w,
+                    height: 200.h, // Usar .h para la altura de la imagen
+                    width: 200.w,
                   ),
-                  SizedBox(height: 25.h), // Espaciado dinámico
+                  SizedBox(height: 20.h), // Espaciado dinámico
                   // Evitar constante en el TextSpan
                   RichText(
                     textAlign: TextAlign.justify,
@@ -39,7 +40,7 @@ class InformationPage extends StatelessWidget {
                         TextSpan(
                           text: 'ComSeñas',
                           style: TextStyle(
-                            fontSize: 24.sp, // Usar .sp para el tamaño de fuente
+                            fontSize: 22.sp,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
@@ -48,7 +49,7 @@ class InformationPage extends StatelessWidget {
                           text:
                               ' es una aplicación móvil de fácil acceso, que ofrece un servicio completo de un traductor automático desarrollado para traducir voz y vídeo en tiempo real de la lengua de señas, lo cual facilita la comunicación entre personas oyentes y no oyentes.',
                           style: TextStyle(
-                            fontSize: 18.sp, // Usar .sp para el tamaño de fuente
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.normal,
                             color: Colors.black,
                           ),
@@ -56,12 +57,13 @@ class InformationPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(height: 25.h), // Espaciado dinámico
+                  SizedBox(height: 20.h), // Espaciado dinámico
                   TextButton(
                     onPressed: () async {
                       await Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const TermsPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const TermsPage()),
                       );
                     },
                     child: Row(
@@ -70,14 +72,14 @@ class InformationPage extends StatelessWidget {
                         Icon(
                           Icons.visibility_off,
                           color: Colors.black,
-                          size: 30.sp, // Usar .sp para el tamaño de icono
+                          size: 30.sp,
                         ),
-                        SizedBox(width: 10.w), // Espaciado dinámico entre icono y texto
+                        SizedBox(width: 10.w),
                         Text(
                           'Términos y condiciones',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 20.sp, // Usar .sp para el tamaño de texto
+                            fontSize: 20.sp,
                             fontWeight: FontWeight.normal,
                             color: Colors.black,
                           ),
@@ -85,7 +87,6 @@ class InformationPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(height: 10.h)
                 ],
               ),
             ),
