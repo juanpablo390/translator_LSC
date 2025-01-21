@@ -232,7 +232,7 @@ class _TextTranslatorPageState extends State<TextTranslatorPage>
                 if (_isAnimating || _animationFinished)
                   Column(
                     children: [
-                      SizedBox(height: 40.h),
+                      SizedBox(height: 60.h),
                       if (_animationOpacity == 0.0)
                         CircularProgressIndicator(
                           color: Color(0xFF2F509D),
@@ -244,16 +244,38 @@ class _TextTranslatorPageState extends State<TextTranslatorPage>
                           animation: _frameAnimation,
                           builder: (context, child) {
                             return _words.isNotEmpty
-                                ? Image.asset(
-                                    'assets/signs/${_words[_currentWordIndex]}/frame_${_frameAnimation.value.round()}.jpg',
-                                    width: 450.w,
-                                    height: 250.h,
+                                ? Container(
+                                    width: 400.w,
+                                    height: 200.h,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Color(0xFF2F509D),
+                                        width: 4.0,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.2),
+                                          blurRadius: 6.0,
+                                          offset: Offset(4.0, 4.0),
+                                        ),
+                                      ],
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      child: Image.asset(
+                                        'assets/signs/${_words[_currentWordIndex]}/frame_${_frameAnimation.value.round()}.jpg',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
                                   )
                                 : Container();
                           },
                         ),
                       ),
-                      if (_unavailableWords.isNotEmpty && _unavailableWords.every((w) => w != ' ') )
+                      SizedBox(height: 20.h),
+                      if (_unavailableWords.isNotEmpty &&
+                          _unavailableWords.every((w) => w != ' '))
                         Text(
                           'Palabras no disponibles: ${_unavailableWords.join(', ')}',
                           style: TextStyle(color: Colors.red, fontSize: 16.sp),
@@ -268,7 +290,8 @@ class _TextTranslatorPageState extends State<TextTranslatorPage>
                               height: 35.h,
                               child: ElevatedButton.icon(
                                 onPressed: _startAnimation,
-                                icon: Icon(Icons.play_arrow, color: Colors.white),
+                                icon:
+                                    Icon(Icons.play_arrow, color: Colors.white),
                                 label: Text(
                                   'Reproducir',
                                   style: TextStyle(
@@ -280,7 +303,8 @@ class _TextTranslatorPageState extends State<TextTranslatorPage>
                                 style: ElevatedButton.styleFrom(
                                   padding: EdgeInsets.all(0),
                                   foregroundColor: Colors.white,
-                                  backgroundColor: const Color(0xFFF49F38), // Color del texto
+                                  backgroundColor: const Color(
+                                      0xFFF49F38), // Color del texto
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20),
                                   ),
@@ -291,29 +315,30 @@ class _TextTranslatorPageState extends State<TextTranslatorPage>
                             SizedBox(width: 10.w), // Espacio entre botones
                             // Botón "Nueva traducción"
                             SizedBox(
-                              width: 155.w,
-                              height: 35.h,
-                              child: ElevatedButton.icon(
-                              onPressed: _resetForNewTranslation,
-                              icon: Icon(Icons.refresh, color: Colors.white),
-                              label: Text(
-                                'Nueva traducción',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 13.sp,
-                                   fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                padding: EdgeInsets.all(0),
-                                foregroundColor: Colors.white,
-                                backgroundColor: const Color(0xFF2F509D) ,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                elevation: 2, // Ligera sombra
-                              ),
-                            )),
+                                width: 155.w,
+                                height: 35.h,
+                                child: ElevatedButton.icon(
+                                  onPressed: _resetForNewTranslation,
+                                  icon:
+                                      Icon(Icons.refresh, color: Colors.white),
+                                  label: Text(
+                                    'Nueva traducción',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 13.sp,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.all(0),
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: const Color(0xFF2F509D),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    elevation: 2, // Ligera sombra
+                                  ),
+                                )),
                           ],
                         ),
                     ],

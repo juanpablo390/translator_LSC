@@ -10,9 +10,14 @@ class TraductorComSenhasApp extends StatelessWidget {
   const TraductorComSenhasApp({super.key});
 
   @override
+
   Widget build(BuildContext context) {
+
+    final size = MediaQuery.of(context).size;
+
     return ScreenUtilInit(
-      designSize: const Size(412, 915), // Tamaño base del diseño
+      //designSize: const Size(412, 915), 
+      designSize: MediaQuery.of(context).size,// Tamaño base del diseño
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
